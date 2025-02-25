@@ -6,7 +6,7 @@ export default ({ env }) => ({
       auth: {
           secret: env('ADMIN_JWT_SECRET'),
       },
-      url: '/admin', // Esto es relativo a la URL base
+      url: '/admin', 
       autoOpen: false,
   },
   app: {
