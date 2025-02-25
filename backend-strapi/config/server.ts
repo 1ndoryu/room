@@ -3,10 +3,11 @@ export default ({ env }) => ({
   port: env.int("PORT", 1337),
   url: env("URL", "https://wandori.us/strapi"),
   admin: {
-      path: env("ADMIN_PATH", "/admin"),
-      build: {
-          publicPath: "/strapi/admin/"
-      }
+      auth: {
+          secret: env('ADMIN_JWT_SECRET'),
+      },
+      url: '/admin', // Esto es relativo a la URL base
+      autoOpen: false,
   },
   app: {
       keys: env.array("APP_KEYS"),
