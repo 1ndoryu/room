@@ -6,7 +6,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
     server: {
         host: "localhost",
-        port: 5176, // Fuerza el puerto correcto
+        port: 5178, // Fuerza el puerto correcto
     },
     plugins: [
         laravel({
