@@ -1,9 +1,10 @@
 <?php
-
+// app/Http/Middleware/HandleInertiaRequests.php
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -32,7 +33,15 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => Auth::check() ? [
+                    'id' => Auth::user()->id,
+                    'username' => Auth::user()->username,
+                    'email' => Auth::user()->email,
+                ] : null,
+            ],
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error'),
             ],
         ];
     }

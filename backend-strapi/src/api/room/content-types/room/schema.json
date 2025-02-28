@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rooms",
+  "info": {
+    "singularName": "room",
+    "pluralName": "rooms",
+    "displayName": "room",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "address": {
+      "type": "string"
+    },
+    "property_type": {
+      "type": "enumeration",
+      "enum": [
+        "apartment",
+        "house",
+        "townhouse",
+        "condo",
+        "basement",
+        "loft",
+        "studio",
+        "trailer"
+      ]
+    }
+  }
+}
