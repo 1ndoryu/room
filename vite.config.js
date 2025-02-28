@@ -2,34 +2,47 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
-import fs from "fs";
 import path from "path";
+import fs from "fs"; // Asegúrate de tener fs
 
 const host =
     process.env.APP_ENV === "production"
-        ? "0.0.0.0" // Cambia esto a "wandori.us" si es necesario
-        : process.env.APP_HOST || "localhost";
-const useHttps = process.env.APP_ENV === "production";
+        ? "wandori.us"
+        : process.env.APP_HOST || "localhost"; // Correcto: host diferente en prod y dev
+const useHttps = process.env.APP_ENV === "production"; // Esto está bien
 
 let serverConfig = {
     host,
     port: 5173,
     hmr: {
-        host, // Esto también podría ser "wandori.us" en producción.
-        clientPort: 5173, // Considera usar 443 en producción si usas HTTPS
+        host,
+        clientPort: process.env.APP_ENV === "production" ? 443 : 5173, // Correcto: 443 en prod, 5173 en dev
     },
     cors: {
-        origin: "https://wandori.us", //  <--  ¡AÑADE ESTO!  Solo tu dominio.
-        // methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'], // Opcional: métodos permitidos
-        // allowedHeaders: ['Content-Type', 'Authorization'], // Opcional: cabeceras permitidas
-        // credentials: true,  // Opcional: si necesitas enviar cookies/credenciales
+        origin:
+            process.env.APP_ENV === "production" ? "https://wandori.us" : "*", // Más flexible en desarrollo
+        // methods, allowedHeaders, credentials (opcional)
     },
 };
 
-if (useHttps) {
+// SOLO añade server.https en DESARROLLO:
+if (process.env.APP_ENV !== "production") {
+    // Asume una estructura de directorios estándar para los certificados en desarrollo
+    // AJUSTA ESTO si tu configuración local es diferente
+    const certDir = process.env.CERT_DIR || "/etc/ssl/certs"; //Ej: /etc/ssl/certs, o usa un .env
+    const keyDir = process.env.KEY_DIR || "/etc/ssl/private";
+
     serverConfig.https = {
-        key: fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`),
-        cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/fullchain.pem`),
+        key: fs.readFileSync(
+            process.env.HTTPS_KEY_PATH
+                ? process.env.HTTPS_KEY_PATH
+                : `${keyDir}/localhost-key.pem`
+        ), //Usa .env o una ruta
+        cert: fs.readFileSync(
+            process.env.HTTPS_CERT_PATH
+                ? process.env.HTTPS_CERT_PATH
+                : `${certDir}/localhost.pem`
+        ),
     };
 }
 
@@ -38,13 +51,13 @@ export default defineConfig({
     plugins: [
         laravel({
             input: "resources/js/app.jsx",
-            refresh: true, // Simplificado a 'true' para mayor brevedad.
+            refresh: true,
         }),
         react(),
     ],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "resources/js"), // <-- Usa path.resolve
+            "@": path.resolve(__dirname, "resources/js"),
         },
     },
 });
