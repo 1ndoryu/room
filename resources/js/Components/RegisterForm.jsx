@@ -1,7 +1,7 @@
 // resources/js/Components/RegisterForm.jsx
 import { cn } from "@/lib/utils"
 import { Link } from "@inertiajs/react";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/Components/ui/button"
 import {
     Card,
     CardContent,
