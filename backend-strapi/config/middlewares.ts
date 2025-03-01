@@ -1,4 +1,10 @@
-module.exports = [
+// config/middlewares.ts
+interface MiddlewareConfig {
+  name: string;
+  config?: any; // Mejor definir una interfaz específica si conoces la estructura de config
+}
+
+const middlewares: (string | MiddlewareConfig)[] = [
   'strapi::errors',
   {
     name: 'strapi::security',
@@ -27,3 +33,5 @@ module.exports = [
   'strapi::favicon',
   'strapi::public',
 ];
+
+export default middlewares;
