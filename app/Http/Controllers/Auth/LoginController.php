@@ -24,6 +24,8 @@ class LoginController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        Log::info('LoginController store: Inicio del proceso de inicio de sesión');
+
         $request->validate([
             'email'    => 'required|string|email',
             'password' => 'required|string',
@@ -31,6 +33,10 @@ class LoginController extends Controller
 
         $strapiUrl = env('STRAPI_URL', 'http://localhost:1337');
         $fullStrapiUrl = "$strapiUrl/api/auth/local";
+
+        Log::info('LoginController store: URL de Strapi', ['url' => $fullStrapiUrl]);
+        Log::info('LoginController store: Datos de la petición a Strapi', ['email' => $request->email, 'password' => '********']);
+
 
         try {
             $response = Http::post($fullStrapiUrl, [
@@ -40,6 +46,7 @@ class LoginController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
+                Log::info('LoginController store: Respuesta de Strapi (éxito)', ['response' => $data]);
                 $jwt = $data['jwt'];
                 $user = $data['user'];
 
@@ -59,7 +66,7 @@ class LoginController extends Controller
             } else {
                 $error = $response->json();
                 Log::error('LoginController store: Error al iniciar sesión', ['response' => $error]);
-                return back()->withErrors(['email' => $error['error']['message'] ?? 'Invalid credentials.']);
+                return back()->withErrors(['email' => $error['error']['message'] ?? 'Credenciales inválidas.']);
             }
         } catch (\Exception $e) {
             Log::critical('LoginController store: Excepción al intentar iniciar sesión', ['message' => $e->getMessage()]);

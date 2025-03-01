@@ -1,6 +1,6 @@
 // components/login-form.jsx
 import { cn } from "@/lib/utils"
-import { Link } from "@inertiajs/react"; // Importante: Importar Link de Inertia
+import { Link } from "@inertiajs/react";
 import { Button } from "@/components/ui/button"
 import {
   Card,
