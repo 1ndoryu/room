@@ -9,11 +9,14 @@ export default ({ env }) => ({
         auth: {
             secret: env("ADMIN_JWT_SECRET"),
         },
-        // URL pública completa del panel de administración
         url: "https://wandori.us/admin",
         autoOpen: false,
     },
     webhooks: {
         populateRelations: env.bool("WEBHOOKS_POPULATE_RELATIONS", false),
     },
+    logger: {  // <---  AÑADE ESTO
+      level: 'debug', // O 'silly' para aún más detalles
+      //  Opcional:  format:  (si quieres un formato específico)
+    }
 });
