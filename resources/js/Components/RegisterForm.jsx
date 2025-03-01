@@ -34,6 +34,19 @@ export function RegisterForm({
                     <form onSubmit={submit}>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
+                                <Label htmlFor="name">Name</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    placeholder="Your name"
+                                    required
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                />
+                                {errors.name && <div className="text-sm text-red-500">{errors.name}</div>}
+                            </div>
+
+                            <div className="grid gap-2">
                                 <Label htmlFor="username">Username</Label>
                                 <Input
                                     id="username"

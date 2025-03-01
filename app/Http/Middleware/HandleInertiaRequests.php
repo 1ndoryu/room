@@ -1,5 +1,6 @@
 <?php
 // app/Http/Middleware/HandleInertiaRequests.php
+
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
@@ -30,8 +31,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
+        return array_merge(parent::share($request), [ // Usa array_merge con parent::share
             'auth' => [
                 'user' => Auth::check() ? [
                     'id' => Auth::user()->id,
@@ -40,9 +40,15 @@ class HandleInertiaRequests extends Middleware
                 ] : null,
             ],
             'flash' => [
-                'success' => session('success'),
-                'error' => session('error'),
+                'success' => $request->session()->get('success'), // Usa $request->session()
+                'error' => $request->session()->get('error'),   // Usa $request->session()
             ],
-        ];
+            // Ya no necesitas esto, se incluye en parent::share
+            // 'errors' => function () use ($request) {
+            //     return $request->session()->get('errors')
+            //         ? $request->session()->get('errors')->getBag('default')->getMessages()
+            //         : (object) [];
+            // },
+        ]);
     }
 }

@@ -1,7 +1,6 @@
 // resources/js/Pages/Rooms/Create.jsx
 import React from 'react';
-import { useForm, Head } from '@inertiajs/react';
-import { Form } from "@/Components/ui/form";
+import { useForm, Head, usePage } from '@inertiajs/react'; // Importa usePage
 import { Button } from "@/Components/ui/button";
 import InputField from '@/Components/InputField';
 import CheckboxField from '@/Components/CheckboxField';
@@ -10,16 +9,16 @@ import TextareaField from '@/Components/TextareaField';
 import ImageUpload from '@/Components/ImageUpload';
 import PropertyTypeSelector from '@/Components/PropertyTypeSelector';
 
-
 function CreateRoom() {
+    const { errors } = usePage().props; // Obtiene los errores de las props
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, reset } = useForm({
         address: '',
         hide_address: false,
         property_type: 'apartment',
-        rent: 50,
+        rent: '', // Inicializa como string vacío
         bills_included: false,
-        security_deposit: 50,
+        security_deposit: '',  // Inicializa como string vacío
         available_on: '',
         preferred_gender: '',
         bathroom_type: 'shared',
@@ -38,39 +37,26 @@ function CreateRoom() {
         requires_background_check: false,
         description: '',
         roomies_description: '',
-        bedrooms: 1,
-        bathrooms: 1,
-        roomies: 1,
-        minimum_stay: 0,
-        maximum_stay: 0,
+        bedrooms: '', // String vacío
+        bathrooms: '', // String vacío
+        roomies: '',  // String vacío
+        minimum_stay: '',    // String vacío
+        maximum_stay: '',    // String vacío
         images: [],
-     });
+    });
 
-
-
-    const onSubmit = () => { //  onSubmit no necesita el parametro data
+    const onSubmit = (e) => { // Recibe el evento 'e'
+        e.preventDefault(); // Previene el comportamiento por defecto del form
         console.log('CreateRoom:onSubmit - Iniciando envío del formulario', data);
-        const formData = new FormData();
 
-        Object.entries(data).forEach(([key, value]) => {
-            if (key === 'images') {
-                value.forEach((image) => formData.append('images', image));
-            } else if (typeof value === 'boolean') {
-                formData.append(key, value ? '1' : '0');
-            } else {
-                formData.append(key, value);
-            }
-        });
-
-        post(route('rooms.store'), formData, {
-            forceFormData: true,
+        post(route('rooms.store'), {  // No necesitas formData aquí
             onSuccess: () => {
                 console.log('CreateRoom:onSubmit - Habitación creada con éxito.');
                 reset();
             },
             onError: (errors) => {
                 console.error('CreateRoom:onSubmit - Error al crear la habitación:', errors);
-            }
+            },
         });
     };
 
@@ -83,12 +69,21 @@ function CreateRoom() {
     return (
         <div className="max-w-3xl p-6 mx-auto bg-white rounded-lg shadow">
             <Head title="Create New Room" />
-            {/* Elimina <Form ...> y </Form> */}
-            <form onSubmit={onSubmit} encType="multipart/form-data" className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6"> {/* Solo onSubmit, no encType */}
+
+            {/* Mostrar errores de validación */}
+             {Object.keys(errors).length > 0 && (
+                <div style={{ color: 'red' }}>
+                  <ul>
+                    {Object.keys(errors).map((key) => (
+                      <li key={key}>{errors[key]}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
                 {/* Image Upload */}
                 <div className="mx-auto w-full max-w-[600px]">
-                    {/* Pasa data y setData a los componentes, en lugar de methods */}
                     <ImageUpload data={data} setData={setData} name="images" />
                 </div>
 

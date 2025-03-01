@@ -381,13 +381,39 @@ export interface ApiRoomRoom extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    accessible: Schema.Attribute.Boolean;
     address: Schema.Attribute.String;
+    available_on: Schema.Attribute.Date;
+    bathroom_type: Schema.Attribute.Enumeration<['shared', 'own', 'ensuite']>;
+    bathrooms: Schema.Attribute.Integer;
+    bedrooms: Schema.Attribute.Integer;
+    bills_included: Schema.Attribute.Boolean;
+    cannabis_friendly: Schema.Attribute.Boolean;
+    cat_friendly: Schema.Attribute.Boolean;
+    children_friendly: Schema.Attribute.Boolean;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    dog_friendly: Schema.Attribute.Boolean;
+    furnished: Schema.Attribute.Boolean;
+    hide_address: Schema.Attribute.Boolean;
+    images: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    internet_access: Schema.Attribute.Boolean;
+    lgbt_friendly: Schema.Attribute.Boolean;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::room.room'> &
       Schema.Attribute.Private;
+    maximum_stay: Schema.Attribute.Integer;
+    minimum_stay: Schema.Attribute.Integer;
+    parking: Schema.Attribute.Boolean;
+    preferred_gender: Schema.Attribute.Enumeration<
+      ['any', 'females', 'males', 'couples']
+    >;
+    private_room: Schema.Attribute.Boolean;
     property_type: Schema.Attribute.Enumeration<
       [
         'apartment',
@@ -401,9 +427,20 @@ export interface ApiRoomRoom extends Struct.CollectionTypeSchema {
       ]
     >;
     publishedAt: Schema.Attribute.DateTime;
+    rent: Schema.Attribute.Integer;
+    requires_background_check: Schema.Attribute.Boolean;
+    roomies: Schema.Attribute.Integer;
+    roomies_description: Schema.Attribute.Text;
+    security_deposit: Schema.Attribute.Integer;
+    senior_friendly: Schema.Attribute.Boolean;
+    student_friendly: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -894,6 +931,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    rooms: Schema.Attribute.Relation<'oneToMany', 'api::room.room'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

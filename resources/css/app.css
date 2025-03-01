@@ -12,7 +12,7 @@
     --popover-foreground: 0 0% 3.9%;
     --primary: 0 0% 20%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 90%;
+    --secondary: 0 0% 94%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
@@ -28,7 +28,10 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
+    --black: #393737;
+    --white: white;
+    --grey: #888787;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -63,6 +66,11 @@
     @apply border-border outline-ring/50;
   }
   body {
+    @apply font-sans bg-background text-foreground;
     @apply bg-background text-foreground;
   }
+  html {
+    font-family: 'Untitled Serif', sans-serif;
+  }
 }
+

@@ -5,10 +5,12 @@ import { RegisterForm } from '@/Components/RegisterForm'; // Asegúrate de la ru
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',        
         username: '',
         email: '',
         password: '',
     });
+    
 
     function handleSubmit(e) {
         e.preventDefault();

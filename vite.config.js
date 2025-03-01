@@ -2,47 +2,28 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
+import fs from "fs";
 import path from "path";
-import fs from "fs"; // Asegúrate de tener fs
 
 const host =
     process.env.APP_ENV === "production"
-        ? "wandori.us"
-        : process.env.APP_HOST || "localhost"; // Correcto: host diferente en prod y dev
-const useHttps = process.env.APP_ENV === "production"; // Esto está bien
+        ? "0.0.0.0"
+        : process.env.APP_HOST || "localhost";
+const useHttps = process.env.APP_ENV === "production";
 
 let serverConfig = {
     host,
     port: 5173,
     hmr: {
         host,
-        clientPort: process.env.APP_ENV === "production" ? 443 : 5173, // Correcto: 443 en prod, 5173 en dev
-    },
-    cors: {
-        origin:
-            process.env.APP_ENV === "production" ? "https://wandori.us" : "*", // Más flexible en desarrollo
-        // methods, allowedHeaders, credentials (opcional)
+        clientPort: 5173,
     },
 };
 
-// SOLO añade server.https en DESARROLLO:
-if (process.env.APP_ENV !== "production") {
-    // Asume una estructura de directorios estándar para los certificados en desarrollo
-    // AJUSTA ESTO si tu configuración local es diferente
-    const certDir = process.env.CERT_DIR || "/etc/ssl/certs"; //Ej: /etc/ssl/certs, o usa un .env
-    const keyDir = process.env.KEY_DIR || "/etc/ssl/private";
-
+if (useHttps) {
     serverConfig.https = {
-        key: fs.readFileSync(
-            process.env.HTTPS_KEY_PATH
-                ? process.env.HTTPS_KEY_PATH
-                : `${keyDir}/localhost-key.pem`
-        ), //Usa .env o una ruta
-        cert: fs.readFileSync(
-            process.env.HTTPS_CERT_PATH
-                ? process.env.HTTPS_CERT_PATH
-                : `${certDir}/localhost.pem`
-        ),
+        key: fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`),
+        cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/fullchain.pem`),
     };
 }
 
@@ -51,13 +32,13 @@ export default defineConfig({
     plugins: [
         laravel({
             input: "resources/js/app.jsx",
-            refresh: true,
+            refresh: true, // Simplificado a 'true' para mayor brevedad.
         }),
         react(),
     ],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "resources/js"),
+            "@": path.resolve(__dirname, "resources/js"), // <-- Usa path.resolve
         },
     },
 });
