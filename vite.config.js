@@ -4,37 +4,36 @@ import react from "@vitejs/plugin-react";
 import fs from 'fs';
 import path from "path";
 
-const host = 'wandori.us'; // Usamos directamente el dominio
+const host = 'wandori.us';
 
 let serverConfig = {
-  host,
-  port: 5173,
-  hmr: false, // Desactivamos HMR en producción
+    host,
+    port: 5173, // Considera usar un puerto diferente si tienes conflictos
+    hmr: {  // Configuración correcta para HMR, si es necesario
+        host, // Asegura que HMR sepa a dónde conectarse
+    },
+     https: {
+       key: fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`),
+       cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/fullchain.pem`),
+     }
 };
-
-
-  serverConfig.https = {
-    key: fs.readFileSync(`/etc/letsencrypt/live/wandori.us/privkey.pem`),
-    cert: fs.readFileSync(`/etc/letsencrypt/live/wandori.us/fullchain.pem`),
-  }
-
 
 export default defineConfig({
     server: serverConfig,
     plugins: [
         laravel({
-            input: "resources/js/app.jsx",
+            input: 'resources/js/app.jsx', // Solo un archivo de entrada
             refresh: true,
         }),
         react(),
     ],
     resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "resources/js"),
-      },
+        alias: {
+            "@": path.resolve(__dirname, "resources/js"),
+        },
     },
-    build: { // <--- Agregamos esto
-      outDir: 'public/build',
-      manifest: true,
-    }
+    // build: {  // <---  Ya está configurado correctamente por laravel-vite-plugin, no es necesario
+    //     outDir: 'public/build',
+    //     manifest: true,
+    // }
 });
