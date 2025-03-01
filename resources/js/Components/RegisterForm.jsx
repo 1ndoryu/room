@@ -8,9 +8,9 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/Components/ui/card"
+import { Input } from "@/Components/ui/input"
+import { Label } from "@/Components/ui/label"
 
 export function RegisterForm({
     className,
