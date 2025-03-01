@@ -1,5 +1,5 @@
 // config/middlewares.ts
-import logger from '../helpers/logger';
+import logger from '@helpers/logger';
 
 export default [
   'strapi::errors',

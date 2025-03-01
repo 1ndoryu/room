@@ -1,7 +1,8 @@
 // helpers/logger.js
-const winston = require("winston");
+const winston = require('winston');
 const { createLogger, format, transports } = winston;
 const { combine, timestamp, label, printf, colorize } = format;
+
 
 // Formato personalizado para los logs
 const myFormat = printf(({ level, message, label, timestamp }) => {

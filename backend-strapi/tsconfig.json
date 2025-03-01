@@ -1,43 +1,39 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "moduleResolution": "Node",
-    "lib": ["ES2020"],
-    "target": "ES2019",
-    "strict": false,
+    "moduleResolution": "node", // Más común y explícito que "Node"
+    "lib": ["ES2020"],  // Puedes mantener ES2020 si necesitas características específicas
+    "target": "ES2019", // O ES2020, según tu entorno de ejecución
+    "strict": true,   // ¡Activa strict mode! Mejora la calidad del código
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noEmitOnError": true,
-    "noImplicitThis": true,
+    "noImplicitThis": true, // Parte de strict mode, pero es bueno tenerlo explícito
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": ".",
+    "baseUrl": ".",  // Importante: Establece la base para las rutas
+    "paths": {
+      "@helpers/*": ["helpers/*"], // Define el alias para la carpeta helpers
+      "@config/*": ["config/*"] //BUENA PRACTICA, alias para config
+    }
   },
   "include": [
-    // Include root files
-    "./",
-    // Include all ts files
-    "./**/*.ts",
-    // Include all js files
-    "./**/*.js",
-    // Force the JSON files in the src folder to be included
-    "src/**/*.json"
+    "./",        // Incluye archivos en la raíz
+    "./**/*.ts",  // Incluye todos los archivos .ts
+    "./**/*.js", // Incluye todos los archivos .js
+    "src/**/*.json" // Incluye archivos JSON (buena práctica)
   ],
-
   "exclude": [
     "node_modules/",
-    "build/",
+    "build/", // Generalmente no necesitas excluir build
     "dist/",
     ".cache/",
     ".tmp/",
-
-    // Do not include admin files in the server compilation
-    "src/admin/",
-    // Do not include test files
-    "**/*.test.*",
-    // Do not include plugins in the server compilation
-    "src/plugins/**"
+    "src/admin/", // Excluye el código del panel de administración (buena práctica)
+    "**/*.test.*",  // Excluye archivos de prueba
+    "src/plugins/**" // Excluye plugins (buena práctica si los tienes)
   ]
 }
