@@ -1,30 +1,23 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
-import fs from "fs";
+import fs from 'fs';
 import path from "path";
 
-// Para producción usamos el dominio real
-const isProduction = process.env.APP_ENV === "production";
-const host = isProduction ? "wandori.us" : (process.env.APP_HOST || "localhost");
-const useHttps = isProduction;
+const host = 'wandori.us'; // Usamos directamente el dominio
 
 let serverConfig = {
-    host,
-    port: 5173,
-    // Si estamos en producción, deshabilitamos HMR para que no se intente conectarse vía WebSocket
-    hmr: isProduction ? false : {
-        host,
-        clientPort: 5173,
-    },
+  host,
+  port: 5173,
+  hmr: false, // Desactivamos HMR en producción
 };
 
-if (useHttps) {
-    serverConfig.https = {
-        key: fs.readFileSync(`/etc/letsencrypt/live/wandori.us/privkey.pem`),
-        cert: fs.readFileSync(`/etc/letsencrypt/live/wandori.us/fullchain.pem`),
-    };
-}
+
+  serverConfig.https = {
+    key: fs.readFileSync(`/etc/letsencrypt/live/wandori.us/privkey.pem`),
+    cert: fs.readFileSync(`/etc/letsencrypt/live/wandori.us/fullchain.pem`),
+  }
+
 
 export default defineConfig({
     server: serverConfig,
@@ -36,8 +29,12 @@ export default defineConfig({
         react(),
     ],
     resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "resources/js"),
-        },
+      alias: {
+        "@": path.resolve(__dirname, "resources/js"),
+      },
     },
+    build: { // <--- Agregamos esto
+      outDir: 'public/build',
+      manifest: true,
+    }
 });
