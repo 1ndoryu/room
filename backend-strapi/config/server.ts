@@ -1,4 +1,3 @@
-// config/server.ts
 export default ({ env }) => ({
     host: env("HOST", "0.0.0.0"),
     port: env.int("PORT", 1337),
@@ -6,13 +5,12 @@ export default ({ env }) => ({
         keys: env.array("APP_KEYS"),
     },
     admin: {
-        path: env("ADMIN_PATH", "/admin"), // <-- Ruta para el panel (¡IMPORTANTE!)
-
+        path: env("ADMIN_PATH", "/admin"),
         auth: {
             secret: env("ADMIN_JWT_SECRET"),
         },
-        url: env("ADMIN_PATH", "/admin"), // <-- URL del panel (¡DEBE SER IGUAL A path!)
-        autoOpen: false, // Opcional, pero recomendado
+        url: "https://wandori.us/admin", // URL pública del panel
+        autoOpen: false,
     },
     webhooks: {
         populateRelations: env.bool("WEBHOOKS_POPULATE_RELATIONS", false),
