@@ -1,7 +1,4 @@
-// config/middlewares.ts
-import logger from '@helpers/logger';
-
-export default [
+module.exports = [
   'strapi::errors',
   {
     name: 'strapi::security',
@@ -9,9 +6,13 @@ export default [
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          'connect-src': ["'self'", 'https:'],
-          'img-src': ["'self'", 'data:', 'blob:', 'https:'],
-          'media-src': ["'self'", 'data:', 'blob:', 'https:'],
+          'default-src': ["'self'", 'https:', 'http:', 'ws:', 'wss:'],
+          'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https:', 'http:'],
+          'connect-src': ["'self'", 'https:', 'http:', 'ws:', 'wss:'],
+          'img-src': ["'self'", 'data:', 'blob:', 'https:', 'http:'],
+          'media-src': ["'self'", 'data:', 'blob:', 'https:', 'http:'],
+          'style-src': ["'self'", "'unsafe-inline'", 'https:', 'http:'],
+          'font-src': ["'self'", 'data:', 'https:', 'http:'],
           upgradeInsecureRequests: null,
         },
       },
@@ -25,14 +26,4 @@ export default [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
-  {
-    name: 'strapi::responseTime',
-    config: {
-      logger: (ctx) => {
-        logger.http(
-          `Peticion: ${ctx.request.method} ${ctx.request.url}  - Tiempo de respuesta: ${ctx.response.responseTime}ms - status ${ctx.response.status} `
-        );
-      },
-    },
-  },
 ];
