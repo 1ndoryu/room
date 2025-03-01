@@ -5,16 +5,15 @@ import fs from "fs";
 import path from "path";
 
 // Para producción usamos el dominio real
-const host =
-    process.env.APP_ENV === "production"
-        ? "wandori.us"
-        : process.env.APP_HOST || "localhost";
-const useHttps = process.env.APP_ENV === "production";
+const isProduction = process.env.APP_ENV === "production";
+const host = isProduction ? "wandori.us" : (process.env.APP_HOST || "localhost");
+const useHttps = isProduction;
 
 let serverConfig = {
     host,
     port: 5173,
-    hmr: {
+    // Si estamos en producción, deshabilitamos HMR para que no se intente conectarse vía WebSocket
+    hmr: isProduction ? false : {
         host,
         clientPort: 5173,
     },
